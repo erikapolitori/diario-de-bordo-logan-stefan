@@ -21,11 +21,11 @@ function updateMissionNote() {
   const selected = getSelectedMissions();
 
   if (selected.length === 0) {
-    missionNote.textContent = "Toque em uma ou mais missoes para marcar sua aventura.";
+    missionNote.textContent = "Toque em uma ou mais missões para marcar sua aventura.";
     return;
   }
 
-  missionNote.textContent = `Missoes escolhidas: ${selected.join(" | ")}`;
+  missionNote.textContent = `Missões escolhidas: ${selected.join(" | ")}`;
 }
 
 function getSelectedMissions() {
@@ -62,7 +62,7 @@ function getVideoDuration(file) {
     };
     video.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error(`Nao consegui conferir a duracao do video ${file.name}.`));
+      reject(new Error(`Não consegui conferir a duração do vídeo ${file.name}.`));
     };
     video.src = url;
   });
@@ -71,19 +71,19 @@ function getVideoDuration(file) {
 async function validateFiles(files) {
   for (const file of files) {
     if (file.type.startsWith("image/") && file.size > 10 * 1024 * 1024) {
-      throw new Error(`A foto "${file.name}" tem ${formatFileSize(file.size)}. O limite e 10 MB por foto.`);
+      throw new Error(`A foto "${file.name}" tem ${formatFileSize(file.size)}. O limite é 10 MB por foto.`);
     }
 
     if (file.type.startsWith("video/")) {
       const duration = await getVideoDuration(file);
 
       if (duration > 120) {
-        throw new Error(`O video "${file.name}" tem mais de 2 minutos.`);
+        throw new Error(`O vídeo "${file.name}" tem mais de 2 minutos.`);
       }
     }
 
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
-      throw new Error(`O arquivo "${file.name}" nao parece ser foto nem video.`);
+      throw new Error(`O arquivo "${file.name}" não parece ser foto nem vídeo.`);
     }
   }
 }
@@ -114,7 +114,7 @@ function fileToBase64(file) {
       const result = String(reader.result);
       resolve(result.split(",")[1]);
     };
-    reader.onerror = () => reject(new Error(`Nao consegui ler o arquivo ${file.name}.`));
+    reader.onerror = () => reject(new Error(`Não consegui ler o arquivo ${file.name}.`));
     reader.readAsDataURL(file);
   });
 }
@@ -128,7 +128,7 @@ async function sendToGoogle(payload) {
   const result = await response.json();
 
   if (!result.ok) {
-    throw new Error(result.error || "O Google Drive nao aceitou o envio.");
+    throw new Error(result.error || "O Google Drive não aceitou o envio.");
   }
 
   return result;
@@ -174,7 +174,7 @@ async function saveMemory(event) {
   }
 
   if (files.length === 0 && !message) {
-    setStatus("Envie pelo menos uma foto, um video ou uma mensagem.", true);
+    setStatus("Envie pelo menos uma foto, um vídeo ou uma mensagem.", true);
     return;
   }
 
@@ -208,7 +208,7 @@ async function saveMemory(event) {
     successMessage.hidden = false;
     saveButton.textContent = "Tesouro guardado";
   } catch (error) {
-    setStatus(error.message || "Nao consegui guardar esse tesouro agora.", true);
+    setStatus(error.message || "Não consegui guardar esse tesouro agora.", true);
     saveButton.textContent = "Guardar tesouro";
   } finally {
     saveButton.disabled = false;

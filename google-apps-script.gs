@@ -1,5 +1,5 @@
-const ROOT_FOLDER_NAME = "Diario de Bordo Logan e Stefan";
-const SPREADSHEET_NAME = "Registros - Diario de Bordo Logan e Stefan";
+const ROOT_FOLDER_NAME = "Diário de Bordo Logan e Stefan";
+const SPREADSHEET_NAME = "Registros - Diário de Bordo Logan e Stefan";
 
 function doPost(event) {
   try {
@@ -13,7 +13,7 @@ function doPost(event) {
       return jsonResponse(saveMemory(payload));
     }
 
-    throw new Error("Acao desconhecida.");
+    throw new Error("Ação desconhecida.");
   } catch (error) {
     return jsonResponse({
       ok: false,
@@ -31,10 +31,10 @@ function uploadFile(payload) {
 
   file.setDescription(
     [
-      "Diario de Bordo Logan e Stefan",
+      "Diário de Bordo Logan e Stefan",
       "Convidado: " + (payload.guestName || ""),
       "Mensagem: " + (payload.message || ""),
-      "Missoes: " + (payload.missions || []).join(", "),
+      "Missões: " + (payload.missions || []).join(", "),
     ].join("\n")
   );
 
@@ -98,10 +98,10 @@ function getOrCreateSheet() {
 
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
-      "Data e horario",
+      "Data e horário",
       "Nome",
       "Mensagem",
-      "Missoes",
+      "Missões",
       "Arquivos",
       "Links",
     ]);

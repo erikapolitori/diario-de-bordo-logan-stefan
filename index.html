@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diario de Bordo | Logan & Stefan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Rye&family=Nunito:wght@500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="#inicio" class="brand">Logan & Stefan</a>
+      <nav aria-label="Navegacao principal">
+        <a href="#wanted">Wanted</a>
+        <a href="#missoes">Missoes</a>
+        <a href="#envio">Enviar</a>
+        <a href="#album">Album</a>
+      </nav>
+    </header>
+
+    <main id="inicio">
+      <section class="hero" aria-labelledby="page-title">
+        <img
+          class="hero-bg"
+          src="assets/logan-stefan-navio.png"
+          alt="Logan e Stefan olhando para um navio pirata no mar"
+        />
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+          <p class="eyebrow">Convite secreto da tripulacao</p>
+          <p class="japanese-motto" lang="ja">仲間と冒険</p>
+          <h1 id="page-title">Diario de Bordo do Capitao Logan e do Imediato Stefan</h1>
+          <p class="lead">
+            Ahoy, tripulante! Voce foi escolhido para registrar os melhores momentos
+            dessa grande aventura. Cada foto, video e recado enviado vira um tesouro
+            guardado para Logan e Stefan.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#envio">Guardar uma memoria</a>
+            <a class="button ghost" href="#missoes">Ver missoes da tripulacao</a>
+          </div>
+        </div>
+
+        <aside class="captain-card" aria-label="Aniversariantes">
+          <img src="assets/logan-stefan-retrato.png" alt="Logan e Stefan fantasiados" />
+          <div>
+            <span>Comando da festa</span>
+            <strong>Capitao Logan</strong>
+            <small>8 anos</small>
+            <strong>Imediato Stefan</strong>
+            <small>1 ano</small>
+          </div>
+        </aside>
+      </section>
+
+      <section class="map-strip" aria-label="Mapa da aventura">
+        <span>Ilha da Festa</span>
+        <span>Tripulacao Convidada</span>
+        <span>Diario de Bordo</span>
+        <span>Bau de Memorias</span>
+      </section>
+
+      <section class="section wanted-section" id="wanted">
+        <div class="section-heading centered">
+          <p class="eyebrow">Cartazes oficiais</p>
+          <h2>Os procurados mais amados dos sete mares.</h2>
+          <p>
+            O Capitao Logan lidera a aventura. O Imediato Stefan e seu braco
+            direito, sempre pronto para comandar sorrisos, colo e bagunca boa.
+          </p>
+        </div>
+
+        <div class="wanted-grid">
+          <article class="poster-card">
+            <img src="assets/wanted-logan.png" alt="Cartaz WANTED do Capitao Logan" />
+            <p>Procurado por comandar a alegria da tripulacao.</p>
+          </article>
+          <article class="poster-card">
+            <img src="assets/wanted-stefan.png" alt="Cartaz WANTED do Imediato Stefan" />
+            <p>Procurado por conquistar todos com um olhar de imediato.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section steps-section">
+        <div class="section-heading">
+          <p class="eyebrow">Como funciona</p>
+          <h2>A festa passa rapido. A tripulacao ajuda a eternizar.</h2>
+        </div>
+
+        <div class="steps">
+          <article>
+            <span>01</span>
+            <h3>Escaneie o QR Code</h3>
+            <p>Somente quem recebeu o link consegue entrar no Diario de Bordo.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Registre seu olhar</h3>
+            <p>Envie fotos, videos curtinhos e mensagens para os aniversariantes.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Guarde no bau</h3>
+            <p>Depois da festa, tudo vira um album cheio de tesouros da familia.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section missions-section" id="missoes">
+        <div class="section-heading centered">
+          <p class="eyebrow">Missoes da tripulacao</p>
+          <h2>Escolha uma missao e capture um momento especial.</h2>
+        </div>
+
+        <div class="mission-grid">
+          <button type="button"><span>01</span> Foto com o Capitao Logan</button>
+          <button type="button"><span>02</span> Foto com o Imediato Stefan</button>
+          <button type="button"><span>03</span> Melhor pose de pirata</button>
+          <button type="button"><span>04</span> Risada mais divertida</button>
+          <button type="button"><span>05</span> Abraco que vale ouro</button>
+          <button type="button"><span>06</span> Tripulacao reunida</button>
+          <button type="button"><span>07</span> Momento fofo que ninguem viu</button>
+          <button type="button"><span>08</span> A bagunca mais divertida</button>
+        </div>
+
+        <p class="mission-note" id="mission-note">
+          Toque em uma ou mais missoes para marcar sua aventura.
+        </p>
+      </section>
+
+      <section class="section form-section" id="envio">
+        <div class="form-copy">
+          <p class="eyebrow">Bau de Memorias</p>
+          <h2>Envie sua foto, video ou recado.</h2>
+          <p>
+            Escreva como voce quer aparecer no diario e deixe uma mensagem para
+            Logan e Stefan lerem quando essa aventura virar lembranca.
+          </p>
+          <div class="small-treasure">
+            <strong>Mensagem sugerida</strong>
+            <span>"Capitao Logan e Imediato Stefan, que essa aventura seja sempre lembrada com muito amor."</span>
+          </div>
+        </div>
+
+        <form class="memory-form">
+          <label>
+            Seu nome
+            <input type="text" name="nome" placeholder="Ex: Tia Ana" />
+          </label>
+
+          <label>
+            Mensagem para o Capitao e o Imediato
+            <textarea name="mensagem" rows="4" placeholder="Escreva seu recado aqui"></textarea>
+          </label>
+
+          <label class="file-drop">
+            <input id="file-input" type="file" name="arquivo" accept="image/*,video/*" />
+            <span>Escolher foto ou video</span>
+            <small>Por enquanto esta e uma previa. Na proxima etapa conectamos o envio real.</small>
+          </label>
+
+          <div class="preview-box" id="preview-box" hidden>
+            <strong>Arquivo escolhido</strong>
+            <span id="file-name"></span>
+          </div>
+
+          <button class="button primary" type="button" id="save-button">Guardar tesouro</button>
+          <p class="success-message" id="success-message" hidden>
+            Tesouro guardado com sucesso! O Capitao Logan e o Imediato Stefan agradecem.
+          </p>
+        </form>
+      </section>
+
+      <section class="section treasure-section" id="album">
+        <div class="section-heading centered">
+          <p class="eyebrow">Previa do album</p>
+          <h2>O Bau de Memorias vai ficar assim: afetivo, tematico e cheio de historia.</h2>
+          <p>Toque em qualquer foto para abrir em tela maior.</p>
+        </div>
+        <div class="memory-wall">
+          <article>
+            <button
+              class="photo-button"
+              type="button"
+              data-full="assets/logan-stefan-navio.png"
+              data-caption="O dia em que a aventura comecou."
+            >
+              <img src="assets/logan-stefan-navio.png" alt="Logan e Stefan olhando para o navio" />
+            </button>
+            <p>"O dia em que a aventura comecou."</p>
+          </article>
+          <article>
+            <button
+              class="photo-button"
+              type="button"
+              data-full="assets/abraco-logan-stefan.png"
+              data-caption="O capitao protegendo seu imediato."
+            >
+              <img src="assets/abraco-logan-stefan.png" alt="Logan abracando Stefan" />
+            </button>
+            <p>"O capitao protegendo seu imediato."</p>
+          </article>
+          <article>
+            <button
+              class="photo-button"
+              type="button"
+              data-full="assets/tripulacao-navio.png"
+              data-caption="A tripulacao reunida para celebrar."
+            >
+              <img src="assets/tripulacao-navio.png" alt="Tripulacao olhando para o navio" />
+            </button>
+            <p>"A tripulacao reunida para celebrar."</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <strong>Diario de Bordo | Logan & Stefan</strong>
+      <span>Uma aventura guardada em fotos, videos e mensagens da tripulacao.</span>
+    </footer>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button class="lightbox-close" type="button" aria-label="Fechar foto ampliada">Fechar</button>
+      <img id="lightbox-image" src="" alt="" />
+      <p id="lightbox-caption"></p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

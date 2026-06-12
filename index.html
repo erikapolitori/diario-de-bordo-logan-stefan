@@ -161,17 +161,19 @@
           </label>
 
           <label class="file-drop">
-            <input id="file-input" type="file" name="arquivo" accept="image/*,video/*" />
-            <span>Escolher foto ou video</span>
-            <small>Por enquanto esta e uma previa. Na proxima etapa conectamos o envio real.</small>
+            <input id="file-input" type="file" name="arquivo" accept="image/*,video/*" multiple />
+            <span>Escolher fotos ou videos</span>
+            <small>Fotos ate 10 MB cada. Videos com ate 2 minutos.</small>
           </label>
 
           <div class="preview-box" id="preview-box" hidden>
-            <strong>Arquivo escolhido</strong>
-            <span id="file-name"></span>
+            <strong>Arquivos escolhidos</strong>
+            <ul id="file-list"></ul>
           </div>
 
-          <button class="button primary" type="button" id="save-button">Guardar tesouro</button>
+          <div class="upload-status" id="upload-status" hidden></div>
+
+          <button class="button primary" type="submit" id="save-button">Guardar tesouro</button>
           <p class="success-message" id="success-message" hidden>
             Tesouro guardado com sucesso! O Capitao Logan e o Imediato Stefan agradecem.
           </p>

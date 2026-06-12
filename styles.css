@@ -534,6 +534,32 @@ textarea {
   color: var(--gold);
 }
 
+.preview-box ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.preview-box li {
+  overflow-wrap: anywhere;
+}
+
+.upload-status {
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(240, 183, 66, 0.22);
+  color: var(--night);
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.upload-status.error {
+  background: rgba(214, 58, 47, 0.16);
+  color: #7d1f18;
+}
+
 .success-message {
   margin: 0;
 }

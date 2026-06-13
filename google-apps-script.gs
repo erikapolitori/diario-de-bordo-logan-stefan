@@ -1,5 +1,5 @@
-const ROOT_FOLDER_NAME = "Diário de Bordo Logan e Stefan";
-const SPREADSHEET_NAME = "Registros - Diário de Bordo Logan e Stefan";
+const ROOT_FOLDER_NAME = "Diario de Bordo Logan e Stefan";
+const SPREADSHEET_NAME = "Registros - Diario de Bordo Logan e Stefan";
 
 function doPost(event) {
   try {
@@ -13,7 +13,7 @@ function doPost(event) {
       return jsonResponse(saveMemory(payload));
     }
 
-    throw new Error("Ação desconhecida.");
+    throw new Error("Acao desconhecida.");
   } catch (error) {
     return jsonResponse({
       ok: false,
@@ -24,17 +24,18 @@ function doPost(event) {
 
 function uploadFile(payload) {
   const root = getOrCreateFolder(ROOT_FOLDER_NAME);
-  const guestFolder = getOrCreateFolder(safeName(payload.guestName || "Tripulante"), root);
+  const guestFolder = getOrCreateFolder(getGuestFolderName(payload), root);
   const bytes = Utilities.base64Decode(payload.base64);
   const blob = Utilities.newBlob(bytes, payload.mimeType, payload.fileName);
   const file = guestFolder.createFile(blob);
 
   file.setDescription(
     [
-      "Diário de Bordo Logan e Stefan",
+      "Diario de Bordo Logan e Stefan",
+      "ID do tripulante: " + (payload.participantId || ""),
       "Convidado: " + (payload.guestName || ""),
       "Mensagem: " + (payload.message || ""),
-      "Missões: " + (payload.missions || []).join(", "),
+      "Missoes: " + (payload.missions || []).join(", "),
     ].join("\n")
   );
 
@@ -57,16 +58,27 @@ function saveMemory(payload) {
 
   sheet.appendRow([
     new Date(),
+    payload.participantId || "",
     payload.guestName || "",
     payload.message || "",
     (payload.missions || []).join(" | "),
+    (payload.missionIds || []).join(" | "),
+    payload.completedCount || 0,
+    payload.totalMissions || "",
     files.map((file) => file.name).join(" | "),
     files.map((file) => file.url).join(" | "),
+    getGuestFolderName(payload),
   ]);
 
   return {
     ok: true,
   };
+}
+
+function getGuestFolderName(payload) {
+  const name = safeName(payload.guestName || "Tripulante");
+  const participantId = String(payload.participantId || "sem-id").slice(0, 8);
+  return name + " - " + participantId;
 }
 
 function getOrCreateFolder(name, parent) {
@@ -98,12 +110,17 @@ function getOrCreateSheet() {
 
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
-      "Data e horário",
+      "Data e horario",
+      "ID do tripulante",
       "Nome",
       "Mensagem",
-      "Missões",
+      "Missoes",
+      "IDs das missoes",
+      "Missoes completas",
+      "Total de missoes",
       "Arquivos",
       "Links",
+      "Pasta no Drive",
     ]);
   }
 

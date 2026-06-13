@@ -162,7 +162,7 @@ h1 {
   margin-bottom: 22px;
   color: var(--white);
   font-size: clamp(3rem, 7vw, 6.8rem);
-  line-height: 0.85;
+  line-height: 0.98;
   text-shadow: 4px 5px 0 rgba(0, 0, 0, 0.35);
 }
 
@@ -433,10 +433,19 @@ h3 {
 }
 
 .mission-note {
-  margin: 18px 0 0;
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px auto 0;
+  border: 3px solid var(--night);
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: var(--gold);
   color: var(--night);
+  font-family: var(--display);
+  font-size: clamp(1rem, 3vw, 1.25rem);
   font-weight: 900;
   text-align: center;
+  box-shadow: 0 7px 0 rgba(6, 24, 39, 0.16);
 }
 
 .form-section {
@@ -676,6 +685,104 @@ textarea {
   cursor: pointer;
 }
 
+.mission-celebration {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 60;
+  width: min(420px, calc(100% - 28px));
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  border: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 22px 18px 18px;
+  background: rgba(6, 24, 39, 0.96);
+  color: var(--white);
+  text-align: center;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.34);
+  transform: translateX(-50%);
+}
+
+.mission-celebration[hidden] {
+  display: none;
+}
+
+.mission-celebration strong {
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 1.35rem;
+}
+
+.mission-celebration p {
+  margin: 0;
+  font-weight: 900;
+}
+
+.coin-burst {
+  position: absolute;
+  inset: -24px 0 auto;
+  height: 42px;
+  pointer-events: none;
+}
+
+.coin-burst span {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #8a5a13;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff4a8, var(--gold) 55%, #b87419);
+  animation: coin-pop 900ms ease-out both;
+}
+
+.coin-burst span:nth-child(1) {
+  --x: -120px;
+  --r: -80deg;
+}
+
+.coin-burst span:nth-child(2) {
+  --x: -60px;
+  --r: 110deg;
+  animation-delay: 60ms;
+}
+
+.coin-burst span:nth-child(3) {
+  --x: 0;
+  --r: 240deg;
+  animation-delay: 100ms;
+}
+
+.coin-burst span:nth-child(4) {
+  --x: 60px;
+  --r: -140deg;
+  animation-delay: 40ms;
+}
+
+.coin-burst span:nth-child(5) {
+  --x: 120px;
+  --r: 90deg;
+  animation-delay: 80ms;
+}
+
+@keyframes coin-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.6) rotate(0deg);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), -46px) scale(1.05) rotate(var(--r));
+  }
+}
+
 @media (max-width: 920px) {
   .topbar {
     align-items: center;
@@ -747,6 +854,7 @@ textarea {
 
   h1 {
     font-size: clamp(2.7rem, 16vw, 4.2rem);
+    line-height: 1.02;
   }
 
   h2 {
@@ -776,6 +884,11 @@ textarea {
 
   .mission-grid button {
     min-height: 92px;
+  }
+
+  .mission-note {
+    border-radius: 12px;
+    padding: 12px 14px;
   }
 
   .memory-wall img {

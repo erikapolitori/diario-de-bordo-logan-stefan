@@ -120,14 +120,14 @@
         </div>
 
         <div class="mission-grid">
-          <button type="button"><span>01</span> Foto com o Capitão Logan</button>
-          <button type="button"><span>02</span> Foto com o Imediato Stefan</button>
-          <button type="button"><span>03</span> Melhor pose de pirata</button>
-          <button type="button"><span>04</span> Risada mais divertida</button>
-          <button type="button"><span>05</span> Abraço que vale ouro</button>
-          <button type="button"><span>06</span> Tripulação reunida</button>
-          <button type="button"><span>07</span> Momento fofo que ninguém viu</button>
-          <button type="button"><span>08</span> A bagunça mais divertida</button>
+          <button type="button" data-mission="foto-logan"><span>01</span> Foto com o Capitão Logan</button>
+          <button type="button" data-mission="foto-stefan"><span>02</span> Foto com o Imediato Stefan</button>
+          <button type="button" data-mission="pose-pirata"><span>03</span> Melhor pose de pirata</button>
+          <button type="button" data-mission="risada"><span>04</span> Risada mais divertida</button>
+          <button type="button" data-mission="abraco"><span>05</span> Abraço que vale ouro</button>
+          <button type="button" data-mission="tripulacao"><span>06</span> Tripulação reunida</button>
+          <button type="button" data-mission="momento-fofo"><span>07</span> Momento fofo que ninguém viu</button>
+          <button type="button" data-mission="bagunca"><span>08</span> A bagunça mais divertida</button>
         </div>
 
         <p class="mission-note" id="mission-note">
@@ -145,7 +145,7 @@
           </p>
           <div class="small-treasure">
             <strong>Mensagem sugerida</strong>
-            <span>"Capitão Logan e Imediato Stefan, que essa aventura seja sempre lembrada com muito amor."</span>
+            <span id="suggested-message"></span>
           </div>
         </div>
 
@@ -163,7 +163,7 @@
           <label class="file-drop">
             <input id="file-input" type="file" name="arquivo" accept="image/*,video/*" multiple />
             <span>Escolher fotos ou vídeos</span>
-            <small>Fotos até 10 MB cada. Vídeos com até 2 minutos.</small>
+            <small>Fotos até 10 MB cada. Vídeos com até 2 minutos e até 25 MB.</small>
           </label>
 
           <div class="preview-box" id="preview-box" hidden>
@@ -233,6 +233,18 @@
       <button class="lightbox-close" type="button" aria-label="Fechar foto ampliada">Fechar</button>
       <img id="lightbox-image" src="" alt="" />
       <p id="lightbox-caption"></p>
+    </div>
+
+    <div class="mission-celebration" id="mission-celebration" hidden>
+      <div class="coin-burst" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <strong>Parabéns, tripulante!</strong>
+      <p>Você completou todas as missões do Capitão Logan e do Imediato Stefan.</p>
     </div>
 
     <script src="script.js"></script>

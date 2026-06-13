@@ -44,10 +44,12 @@ function uploadFile(payload) {
     file: {
       id: file.getId(),
       name: file.getName(),
+      originalName: payload.originalFileName || payload.fileName,
       url: file.getUrl(),
       folder: guestFolder.getName(),
       mimeType: payload.mimeType,
       size: payload.size,
+      originalSize: payload.originalSize || payload.size,
     },
   };
 }

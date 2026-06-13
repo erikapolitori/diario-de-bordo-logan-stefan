@@ -2,6 +2,8 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVD_WThtsGPZ
 const MAX_PHOTO_SIZE = 10 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 25 * 1024 * 1024;
 const MAX_VIDEO_SECONDS = 120;
+const PHOTO_MAX_DIMENSION = 2000;
+const PHOTO_QUALITY = 0.86;
 const STORAGE_PREFIX = "diarioLoganStefan";
 
 const missionButtons = document.querySelectorAll(".mission-grid button");
@@ -218,6 +220,65 @@ function fileToBase64(file) {
   });
 }
 
+function loadImageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const url = URL.createObjectURL(file);
+
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error(`Não consegui otimizar a foto ${file.name}.`));
+    };
+    image.src = url;
+  });
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+        return;
+      }
+
+      reject(new Error("Não consegui preparar a foto para envio."));
+    }, type, quality);
+  });
+}
+
+async function optimizeImage(file) {
+  if (!file.type.startsWith("image/")) {
+    return file;
+  }
+
+  const image = await loadImageFromFile(file);
+  const scale = Math.min(1, PHOTO_MAX_DIMENSION / Math.max(image.width, image.height));
+  const width = Math.round(image.width * scale);
+  const height = Math.round(image.height * scale);
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  canvas.width = width;
+  canvas.height = height;
+  context.drawImage(image, 0, 0, width, height);
+
+  const blob = await canvasToBlob(canvas, "image/jpeg", PHOTO_QUALITY);
+  const optimizedName = file.name.replace(/\.[^.]+$/, "") + "-otimizada.jpg";
+
+  if (blob.size >= file.size) {
+    return file;
+  }
+
+  return new File([blob], optimizedName, {
+    type: "image/jpeg",
+    lastModified: Date.now(),
+  });
+}
+
 async function sendToGoogle(payload) {
   const response = await fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
@@ -234,7 +295,8 @@ async function sendToGoogle(payload) {
 }
 
 async function uploadFile(file, guestName, message, missions, missionIds, index) {
-  const base64 = await fileToBase64(file);
+  const uploadFile = file.type.startsWith("image/") ? await optimizeImage(file) : file;
+  const base64 = await fileToBase64(uploadFile);
 
   const result = await sendToGoogle({
     action: "uploadFile",
@@ -243,9 +305,11 @@ async function uploadFile(file, guestName, message, missions, missionIds, index)
     message,
     missions,
     missionIds,
-    fileName: file.name,
-    mimeType: file.type,
-    size: file.size,
+    fileName: uploadFile.name,
+    originalFileName: file.name,
+    mimeType: uploadFile.type,
+    size: uploadFile.size,
+    originalSize: file.size,
     index,
     base64,
   });
@@ -291,7 +355,8 @@ async function saveMemory(event) {
     const uploadedFiles = [];
 
     for (const [index, file] of files.entries()) {
-      setStatus(`Enviando ${index + 1} de ${files.length}: ${file.name}`);
+      const action = file.type.startsWith("image/") ? "Otimizando e enviando" : "Enviando";
+      setStatus(`${action} ${index + 1} de ${files.length}: ${file.name}`);
       uploadedFiles.push(await uploadFile(file, guestName, message, missions, missionIds, index + 1));
     }
 

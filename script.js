@@ -1,7 +1,7 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVD_WThtsGPZQz-dptPakpYNCJxdkV7Np77luxXIrZqoBlGaCNLyfZmoRoHpP4EwPj/exec";
 const MAX_PHOTO_SIZE = 10 * 1024 * 1024;
-const MAX_VIDEO_SIZE = 25 * 1024 * 1024;
-const MAX_VIDEO_SECONDS = 120;
+const MAX_VIDEO_SIZE = 185 * 1024 * 1024;
+const MAX_VIDEO_SECONDS = 60;
 const PHOTO_MAX_DIMENSION = 2000;
 const PHOTO_QUALITY = 0.86;
 const STORAGE_PREFIX = "diarioLoganStefan";
@@ -49,6 +49,18 @@ const messageSuggestions = [
 ];
 let lastSuggestionIndex = -1;
 
+function readStoredList(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredList(key, values) {
+  localStorage.setItem(key, JSON.stringify([...new Set(values)]));
+}
+
 function getParticipantId() {
   const existingId = localStorage.getItem(`${STORAGE_PREFIX}:participantId`);
 
@@ -64,15 +76,19 @@ function getParticipantId() {
 const participantId = getParticipantId();
 
 function getCompletedMissionIds() {
-  try {
-    return JSON.parse(localStorage.getItem(`${STORAGE_PREFIX}:missions`) || "[]");
-  } catch {
-    return [];
-  }
+  return readStoredList(`${STORAGE_PREFIX}:missions`);
 }
 
 function saveCompletedMissionIds(missionIds) {
-  localStorage.setItem(`${STORAGE_PREFIX}:missions`, JSON.stringify([...new Set(missionIds)]));
+  saveStoredList(`${STORAGE_PREFIX}:missions`, missionIds);
+}
+
+function getPendingMissionIds() {
+  return readStoredList(`${STORAGE_PREFIX}:pendingMissions`);
+}
+
+function savePendingMissionIds(missionIds) {
+  saveStoredList(`${STORAGE_PREFIX}:pendingMissions`, missionIds);
 }
 
 function getSelectedMissions() {
@@ -89,24 +105,36 @@ function getSelectedMissionIds() {
 
 function syncMissionButtons() {
   const completedMissionIds = getCompletedMissionIds();
+  const pendingMissionIds = getPendingMissionIds();
+  const visibleMissionIds = [...new Set([...completedMissionIds, ...pendingMissionIds])];
 
   missionButtons.forEach((button) => {
-    button.classList.toggle("selected", completedMissionIds.includes(button.dataset.mission));
+    const isCompleted = completedMissionIds.includes(button.dataset.mission);
+
+    button.classList.toggle("selected", visibleMissionIds.includes(button.dataset.mission));
+    button.classList.toggle("completed", isCompleted);
   });
 
   updateMissionNote();
 }
 
 function updateMissionNote() {
-  const selected = getSelectedMissions();
+  const completedCount = getCompletedMissionIds().length;
+  const pendingCount = getPendingMissionIds().length;
   const total = missionButtons.length;
 
-  if (selected.length === 0) {
-    missionNote.textContent = `0 de ${total} missões completas. Você pode fazer uma de cada vez.`;
+  if (completedCount === total) {
+    missionNote.textContent = `${total} de ${total} missões completas. Parabéns, tripulante!`;
     return;
   }
 
-  missionNote.textContent = `${selected.length} de ${total} missões completas: ${selected.join(" | ")}`;
+  if (pendingCount > 0) {
+    const plural = pendingCount === 1 ? "missão marcada" : "missões marcadas";
+    missionNote.textContent = `${completedCount} de ${total} missões completas. ${pendingCount} ${plural} para o próximo envio.`;
+    return;
+  }
+
+  missionNote.textContent = `${completedCount} de ${total} missões completas. Você pode fazer uma de cada vez.`;
 }
 
 function showRandomSuggestion() {
@@ -173,13 +201,13 @@ async function validateFiles(files) {
 
     if (file.type.startsWith("video/")) {
       if (file.size > MAX_VIDEO_SIZE) {
-        throw new Error(`O vídeo "${file.name}" tem ${formatFileSize(file.size)}. Para o Google Drive funcionar bem, o limite é 25 MB por vídeo.`);
+        throw new Error(`O vídeo "${file.name}" tem ${formatFileSize(file.size)}. O limite é 185 MB por vídeo.`);
       }
 
       const duration = await getVideoDuration(file);
 
       if (duration > MAX_VIDEO_SECONDS) {
-        throw new Error(`O vídeo "${file.name}" tem mais de 2 minutos.`);
+        throw new Error(`O vídeo "${file.name}" tem mais de 1 minuto.`);
       }
     }
 
@@ -362,19 +390,22 @@ async function saveMemory(event) {
 
     setStatus("Salvando o registro na planilha...");
 
+    const nextCompletedMissionIds = [...new Set([...getCompletedMissionIds(), ...missionIds])];
+
     await sendToGoogle({
       action: "saveMemory",
       participantId,
       guestName,
       message,
       missions,
-      missionIds,
-      completedCount: missionIds.length,
+      missionIds: nextCompletedMissionIds,
+      completedCount: nextCompletedMissionIds.length,
       totalMissions: missionButtons.length,
       files: uploadedFiles,
     });
 
-    saveCompletedMissionIds(missionIds);
+    saveCompletedMissionIds(nextCompletedMissionIds);
+    savePendingMissionIds([]);
     memoryForm.reset();
     renderSelectedFiles();
     syncMissionButtons();
@@ -383,7 +414,7 @@ async function saveMemory(event) {
     successMessage.hidden = false;
     saveButton.textContent = "Tesouro guardado";
 
-    if (previousCompletedCount < missionButtons.length && missionIds.length === missionButtons.length) {
+    if (previousCompletedCount < missionButtons.length && nextCompletedMissionIds.length === missionButtons.length) {
       showMissionCelebration();
     }
   } catch (error) {
@@ -405,8 +436,21 @@ missionButtons.forEach((button, index) => {
   button.dataset.mission = button.dataset.mission || `missao-${index + 1}`;
 
   button.addEventListener("click", () => {
-    button.classList.toggle("selected");
-    updateMissionNote();
+    const missionId = button.dataset.mission;
+    const completedMissionIds = getCompletedMissionIds();
+
+    if (completedMissionIds.includes(missionId)) {
+      button.classList.add("selected");
+      return;
+    }
+
+    const pendingMissionIds = getPendingMissionIds();
+    const nextPendingMissionIds = pendingMissionIds.includes(missionId)
+      ? pendingMissionIds.filter((id) => id !== missionId)
+      : [...pendingMissionIds, missionId];
+
+    savePendingMissionIds(nextPendingMissionIds);
+    syncMissionButtons();
   });
 });
 

@@ -432,6 +432,27 @@ h3 {
   box-shadow: 0 7px 0 rgba(214, 58, 47, 0.35);
 }
 
+.mission-grid button.completed {
+  border-color: #84600f;
+  background:
+    linear-gradient(135deg, rgba(240, 183, 66, 0.92), rgba(255, 241, 200, 0.9)),
+    var(--gold);
+}
+
+.mission-grid button.completed::after {
+  content: "Guardada";
+  display: block;
+  width: fit-content;
+  margin-top: 12px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--night);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
 .mission-note {
   width: fit-content;
   max-width: 100%;
